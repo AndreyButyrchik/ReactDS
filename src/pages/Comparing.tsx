@@ -6,6 +6,8 @@ import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
+import { connect } from 'react-redux'
+import { likeGirl } from '../actions/index';
 
 
 const styles = {
@@ -44,7 +46,8 @@ class Comparing extends React.PureComponent<any, any> {
         })
     }
 
-    public changeGirls() {
+    public changeGirls = (event: any, id: any) => {
+        this.props.likeGirl(id);
         this.setState({
             firstPhotoNumber: this._getRandomArbitrary(0, 990),
             secondPhotoNumber: this._getRandomArbitrary(0, 990),
@@ -66,7 +69,7 @@ class Comparing extends React.PureComponent<any, any> {
                         <Box display="flex" alignItems="center">
                             <Box m={6}>
                                 <Card>
-                                    <CardActionArea onClick={this.changeGirls}>
+                                    <CardActionArea onClick={e => this.changeGirls(e, this.state.firstPhotoNumber)}>
                                         <CardMedia
                                             className={classes.media}
                                             image={require(`../images/${this.state.firstPhotoNumber}.png`)}
@@ -76,7 +79,7 @@ class Comparing extends React.PureComponent<any, any> {
                             </Box>
                             <Box m={6}>
                                 <Card>
-                                    <CardActionArea onClick={this.changeGirls}>
+                                    <CardActionArea onClick={e => this.changeGirls(e, this.state.secondPhotoNumber)}>
                                         <CardMedia
                                             className={classes.media}
                                             image={require(`../images/${this.state.secondPhotoNumber}.png`)}
@@ -92,4 +95,12 @@ class Comparing extends React.PureComponent<any, any> {
     }
 }
 
-export default withStyles(styles)(Comparing);
+const mapDispatchToProps = (dispatch: any) => ({
+    likeGirl: (id: number) => dispatch(likeGirl(id))
+})
+
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(withStyles(styles)(Comparing));
